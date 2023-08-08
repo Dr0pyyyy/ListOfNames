@@ -42,6 +42,9 @@ namespace ListOfNames
 			LoadDataFromCsvIntoRecords(_csvFile);
 			dataGridView1.DataSource = _records;
 
+			//Get last id
+			_id = _records.Last().Id;
+
 			_server.DataReceived += HandleDataReceived;
 		}
 
@@ -73,7 +76,8 @@ namespace ListOfNames
 		{
 			using (StreamWriter writer = new StreamWriter(_csvFile, true))
 			{
-				writer.WriteLine($"1,{firstName},{lastName}");
+				_id++;
+				writer.WriteLine($"{_id},{firstName},{lastName}");
 			}
 		}
 

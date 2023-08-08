@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-	public partial class PersonForm : Form
+	public partial class RecordForm : Form
 	{
 		private string _firstName;
 		private string _lastName;
@@ -25,7 +25,7 @@ namespace Client
 			get { return _lastName; }
 		}
 
-		public PersonForm()
+		public RecordForm()
 		{
 			InitializeComponent();
 		}

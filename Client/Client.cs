@@ -19,6 +19,7 @@ namespace Client
 		{
 			InitializeComponent();
 		}
+
 		private void Client_Load(object sender, EventArgs e)
 		{
 			if (btn_connect.Enabled)
@@ -37,6 +38,7 @@ namespace Client
 		private void btn_connect_Click(object sender, EventArgs e)
 		{
 			btn_connect.Enabled = false;
+
 			btn_create.Enabled = true;
 			btn_edit.Enabled = true;
 			btn_delete.Enabled = true;
@@ -44,12 +46,12 @@ namespace Client
 			txt_box_ip.Enabled = false;
 			txt_box_port.Enabled = false;
 
-			_client.Connect(txt_box_ip.Text, 8910);
+			_client.Connect(txt_box_ip.Text, 8910);//Todo: Hodnota na tvrdo, změnit!!
 		}
 
 		private void btn_create_Click(object sender, EventArgs e)
 		{
-			using (PersonForm personForm = new PersonForm())
+			using (RecordForm personForm = new RecordForm())
 			{
 				DialogResult result = personForm.ShowDialog();
 

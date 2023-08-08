@@ -1,6 +1,6 @@
 ﻿namespace Client
 {
-	partial class PersonForm
+	partial class RecordForm
 	{
 		/// <summary>
 		/// Required designer variable.
