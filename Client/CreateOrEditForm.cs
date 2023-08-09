@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-	public partial class RecordForm : Form
+	public partial class CreateOrEditForm : Form
 	{
 		private string _firstName;
 		private string _lastName;
@@ -25,7 +25,7 @@ namespace Client
 			get { return _lastName; }
 		}
 
-		public RecordForm()
+		public CreateOrEditForm()
 		{
 			InitializeComponent();
 		}
@@ -35,10 +35,10 @@ namespace Client
 			this.Close();
 		}
 
-		private void btn_create_Click(object sender, EventArgs e)
+		private void btn_save_Click(object sender, EventArgs e)
 		{
 			_firstName = txt_box_firstname.Text;
-			_lastName = txt_box_lastname.Text;
+			_lastName = txt_box_lastname.Text; //TODO pokud nejsou textboxy prázdné, tak dialog.result OK, jinak ošetřit
 
 			this.DialogResult = DialogResult.OK;
 			this.Close();

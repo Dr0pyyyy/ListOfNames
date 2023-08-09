@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
 
 namespace ListOfNames
 {
@@ -17,7 +18,7 @@ namespace ListOfNames
 	{
 		private SimpleTcpServer _server;
 		private List<Record> _records = new List<Record>();
-		private string _csvFile = @"..\..\..\userData.csv";
+		private string _csvFile = @"..\..\..\userData.csv"; //TODO z absolutní cesty udělat proměnnou
 		private int _id;
 
 		public Server()
@@ -36,16 +37,19 @@ namespace ListOfNames
 			btn_start.Enabled = false;
 			btn_stop.Enabled = true;
 
-			IPAddress ip = IPAddress.Parse(txt_box_ip.Text);
-			_server.Start(ip, Convert.ToInt32(txt_box_port.Text));
+			txt_box_ip.Enabled = false;
+			txt_box_port.Enabled = false;
+
+			IPAddress ip = IPAddress.Parse(txt_box_ip.Text); //TODO OŠETŘIT ŠPATNÝ VSTUP
+			_server.Start(ip, Convert.ToInt32(txt_box_port.Text)); //TODO OŠETŘIT ŠPATNÝ VSTUP
 
 			LoadDataFromCsvIntoRecords(_csvFile);
 			dataGridView1.DataSource = _records;
 
 			//Get last id
-			_id = _records.Last().Id;
+			_id = _records.Count > 0 ? _records.Last().Id : 0;
 
-			_server.DataReceived += HandleDataReceived;
+			_server.DataReceived += HandleRecievedData;
 		}
 
 		private void btn_stop_Click(object sender, EventArgs e)
@@ -53,32 +57,91 @@ namespace ListOfNames
 			btn_start.Enabled = true;
 			btn_stop.Enabled = false;
 
+			txt_box_ip.Enabled = true;
+			txt_box_port.Enabled = true;
+
 			_server.Stop();
 
+			//Clean up
 			dataGridView1.DataSource = null;
 			_records.Clear();
 		}
 
-		private void HandleDataReceived(object sender, SimpleTCP.Message e)
+		private void HandleRecievedData(object sender, SimpleTCP.Message e)
 		{
 			string[] dataParts = e.MessageString.Split(',');
 
-			if (dataParts.Length == 3 && dataParts[0] == "CREATE")
+			if (dataParts.Length == 3 && dataParts.First() == "CREATE")
 			{
-				string firstName = dataParts[1];
-				string lastName = dataParts[2];
-
-				SaveToCsvFile(firstName, lastName);
+				AddRecordToCsv(dataParts[1], dataParts[2].Replace("\u0013", ""));  //TODO find out why client sends \u0013 at the end of call
 			}
+			else if (dataParts.First().Replace("\u0013", "") == "DELETE")  //TODO find out why client sends \u0013 at the end of call
+			{
+				if (dataGridView1.SelectedRows.Count == 1) //Only one record must be selected
+					DeleteRecordFromCsv((int)dataGridView1.SelectedCells[0].Value);
+			}
+			if (dataParts.Length == 3 && dataParts.First() == "EDIT")
+			{
+				if (dataGridView1.SelectedRows.Count == 1)
+					EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", "")); //TODO find out why client sends \u0013 at the end of call
+			}
+
+			//TODO přidat refresh datagridview, nejspíš implementovat funkci LoadDataFromCsvIntoRecords
 		}
 
-		private void SaveToCsvFile(string firstName, string lastName)
+		private void AddRecordToCsv(string firstName, string lastName)
 		{
 			using (StreamWriter writer = new StreamWriter(_csvFile, true))
 			{
 				_id++;
 				writer.WriteLine($"{_id},{firstName},{lastName}");
 			}
+		}
+
+		private void DeleteRecordFromCsv(int idToDelete)
+		{
+			bool found = false;
+			List<string> lines = new List<string>();
+
+			foreach (string line in File.ReadAllLines(_csvFile))
+			{
+				string[] parts = line.Split(',');
+				if (int.TryParse(parts[0], out int id) && id == idToDelete)
+				{
+					found = true;
+					continue; //Skip the line with the specified ID
+				}
+
+				lines.Add(line);
+			}
+
+			if (found)
+			{
+				File.WriteAllLines(_csvFile, lines);
+				//TODO add text to console
+			}
+			else
+			{
+				//TODO add error message to console
+			}
+		}
+
+		private void EditRecordToCsv(int idToEdit, string firstName, string lastName)
+		{
+			List<string> modifiedLines = new List<string>();
+
+			foreach (string line in File.ReadAllLines(_csvFile))
+			{
+				string[] parts = line.Split(',');
+				if (int.TryParse(parts[0], out int id) && id == idToEdit)
+					modifiedLines.Add($"{idToEdit},{firstName},{lastName}");
+				
+				else
+					modifiedLines.Add(line);
+			}
+
+			File.WriteAllLines(_csvFile, modifiedLines);
+			//TODO: Přidat log do console
 		}
 
 		private void LoadDataFromCsvIntoRecords(string filePath)

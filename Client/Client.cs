@@ -46,21 +46,38 @@ namespace Client
 			txt_box_ip.Enabled = false;
 			txt_box_port.Enabled = false;
 
-			_client.Connect(txt_box_ip.Text, 8910);//Todo: Hodnota na tvrdo, změnit!!
+			_client.Connect(txt_box_ip.Text, 8910);//Todo: Hodnota na tvrdo, změnit!! A ještě dát to do trycatche
 		}
 
 		private void btn_create_Click(object sender, EventArgs e)
 		{
-			using (RecordForm personForm = new RecordForm())
+			using (CreateOrEditForm personForm = new CreateOrEditForm())
+			{
+				DialogResult result = personForm.ShowDialog();
+
+				if (result == DialogResult.OK)
+					_client.WriteLine($"CREATE,{personForm.FirstName},{personForm.LastName}");
+			}
+		}
+
+		private void btn_delete_Click(object sender, EventArgs e)
+		{
+			DialogResult dialogResult = MessageBox.Show("Are you sure you wanna delete selected record?", "Delete record" ,MessageBoxButtons.YesNo);
+			if (dialogResult == DialogResult.Yes)
+				_client.WriteLine("DELETE");
+		}
+
+		private void btn_edit_Click(object sender, EventArgs e)
+		{
+			using (CreateOrEditForm personForm = new CreateOrEditForm())
 			{
 				DialogResult result = personForm.ShowDialog();
 
 				if (result == DialogResult.OK)
 				{
-					string firstName = personForm.FirstName;
-					string lastName = personForm.LastName;
-
-					_client.WriteLine($"CREATE,{firstName},{lastName}");
+					DialogResult dialogResult = MessageBox.Show("Are you sure you wanna edit selected record?", "Edit record", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.Yes)
+						_client.WriteLine($"EDIT,{personForm.FirstName},{personForm.LastName}");
 				}
 			}
 		}

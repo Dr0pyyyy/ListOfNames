@@ -55,19 +55,19 @@
     <Compile Include="Client.Designer.cs">
       <DependentUpon>Client.cs</DependentUpon>
     </Compile>
-    <Compile Include="RecordForm.cs">
+    <Compile Include="CreateOrEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RecordForm.Designer.cs">
-      <DependentUpon>RecordForm.cs</DependentUpon>
+    <Compile Include="CreateOrEditForm.Designer.cs">
+      <DependentUpon>CreateOrEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Client.resx">
       <DependentUpon>Client.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RecordForm.resx">
-      <DependentUpon>RecordForm.cs</DependentUpon>
+    <EmbeddedResource Include="CreateOrEditForm.resx">
+      <DependentUpon>CreateOrEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

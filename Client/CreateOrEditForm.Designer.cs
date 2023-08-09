@@ -1,6 +1,6 @@
 ﻿namespace Client
 {
-	partial class RecordForm
+	partial class CreateOrEditForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,24 +28,24 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.btn_create = new System.Windows.Forms.Button();
+			this.btn_save = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.txt_box_firstname = new System.Windows.Forms.TextBox();
 			this.txt_box_lastname = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
 			this.btn_cancel = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
-			// btn_create
+			// btn_save
 			// 
-			this.btn_create.Location = new System.Drawing.Point(115, 132);
-			this.btn_create.Name = "btn_create";
-			this.btn_create.Size = new System.Drawing.Size(75, 23);
-			this.btn_create.TabIndex = 2;
-			this.btn_create.Text = "Create";
-			this.btn_create.UseVisualStyleBackColor = true;
-			this.btn_create.Click += new System.EventHandler(this.btn_create_Click);
+			this.btn_save.Location = new System.Drawing.Point(115, 132);
+			this.btn_save.Name = "btn_save";
+			this.btn_save.Size = new System.Drawing.Size(75, 23);
+			this.btn_save.TabIndex = 2;
+			this.btn_save.Text = "Save";
+			this.btn_save.UseVisualStyleBackColor = true;
+			this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
 			// 
 			// label2
 			// 
@@ -79,15 +79,6 @@
 			this.txt_box_lastname.Size = new System.Drawing.Size(100, 20);
 			this.txt_box_lastname.TabIndex = 6;
 			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(55, 21);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(94, 13);
-			this.label4.TabIndex = 7;
-			this.label4.Text = "Create new record";
-			// 
 			// btn_cancel
 			// 
 			this.btn_cancel.Location = new System.Drawing.Point(17, 132);
@@ -98,7 +89,16 @@
 			this.btn_cancel.UseVisualStyleBackColor = true;
 			this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
 			// 
-			// PersonForm
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(53, 20);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(103, 13);
+			this.label4.TabIndex = 7;
+			this.label4.Text = "Create or edit record";
+			// 
+			// RecordForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -109,8 +109,8 @@
 			this.Controls.Add(this.txt_box_firstname);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.btn_create);
-			this.Name = "PersonForm";
+			this.Controls.Add(this.btn_save);
+			this.Name = "RecordForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "PersonForm";
 			this.ResumeLayout(false);
@@ -119,12 +119,12 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.Button btn_create;
+		private System.Windows.Forms.Button btn_save;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox txt_box_firstname;
 		private System.Windows.Forms.TextBox txt_box_lastname;
-		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button btn_cancel;
+		private System.Windows.Forms.Label label4;
 	}
 }
