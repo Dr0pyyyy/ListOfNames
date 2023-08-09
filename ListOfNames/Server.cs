@@ -18,7 +18,7 @@ namespace ListOfNames
 	{
 		private SimpleTcpServer _server;
 		private List<Record> _records = new List<Record>();
-		private string _csvFile = @"..\..\..\userData.csv"; //TODO z absolutní cesty udělat proměnnou
+		private string _csvFile = @"..\..\..\userData.csv"; //TODO z absolutní cesty udělat proměnnou a změnit defaultní lokaci (dát víc hluboko, nejspíš do složky bin)
 		private int _id;
 
 		public Server()
@@ -43,9 +43,17 @@ namespace ListOfNames
 			txt_box_ip.Enabled = false;
 			txt_box_port.Enabled = false;
 
-			IPAddress ip = IPAddress.Parse(txt_box_ip.Text);
-			_server.Start(ip, Convert.ToInt32(txt_box_port.Text));
-			txt_box_server_console.Text += $"Server starting...{Environment.NewLine}";
+			try
+			{
+				IPAddress ip = IPAddress.Parse(txt_box_ip.Text);
+				_server.Start(ip, Convert.ToInt32(txt_box_port.Text));
+				UpdateConsoleText($"Server starting...");
+			}
+			catch (Exception ex)
+			{
+				UpdateConsoleText(ex.Message);
+				return;
+			}
 
 			LoadDataFromCsvIntoRecords(_csvFile);
 			dataGridView1.DataSource = _records;
@@ -77,26 +85,11 @@ namespace ListOfNames
 			string[] dataParts = e.MessageString.Split(',');
 
 			if (dataParts.Length == 3 && dataParts.First() == "CREATE")
-			{
 				AddRecordToCsv(dataParts[1], dataParts[2].Replace("\u0013", ""));  //TODO find out why client sends \u0013 at the end of call
-				UpdateConsoleText($"Record created!{Environment.NewLine}");
-			}
-			else if (dataParts.First().Replace("\u0013", "") == "DELETE")  //TODO find out why client sends \u0013 at the end of call
-			{
-				if (dataGridView1.SelectedRows.Count == 1) //Only one record must be selected
-				{
-					DeleteRecordFromCsv((int)dataGridView1.SelectedCells[0].Value);
-					UpdateConsoleText($"Record deleted!{Environment.NewLine}");
-				}
-			}
-			if (dataParts.Length == 3 && dataParts.First() == "EDIT")
-			{
-				if (dataGridView1.SelectedRows.Count == 1)
-				{
-					EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", "")); //TODO find out why client sends \u0013 at the end of call
-					UpdateConsoleText($"Record edited!{Environment.NewLine}");
-				}
-			}
+			else if (dataParts.First().Replace("\u0013", "") == "DELETE" && dataGridView1.SelectedRows.Count == 1)  //TODO also here
+				DeleteRecordFromCsv((int)dataGridView1.SelectedCells[0].Value);
+			if (dataParts.Length == 3 && dataParts.First() == "EDIT" && dataGridView1.SelectedRows.Count == 1)
+				EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", "")); //TODO also here
 
 			//TODO přidat refresh datagridview, nejspíš implementovat funkci LoadDataFromCsvIntoRecords
 		}
@@ -107,6 +100,7 @@ namespace ListOfNames
 			{
 				_id++;
 				writer.WriteLine($"{_id},{firstName},{lastName}");
+				UpdateConsoleText("Record created!");
 			}
 		}
 
@@ -130,12 +124,10 @@ namespace ListOfNames
 			if (found)
 			{
 				File.WriteAllLines(_csvFile, lines);
-				//TODO add text to console
+				UpdateConsoleText("Record deleted!");
 			}
 			else
-			{
-				//TODO add error message to console
-			}
+				UpdateConsoleText("Record not found!");
 		}
 
 		private void EditRecordToCsv(int idToEdit, string firstName, string lastName)
@@ -153,7 +145,7 @@ namespace ListOfNames
 			}
 
 			File.WriteAllLines(_csvFile, modifiedLines);
-			//TODO: Přidat log do console
+			UpdateConsoleText("Record edited!");
 		}
 
 		private void LoadDataFromCsvIntoRecords(string filePath)
@@ -175,14 +167,15 @@ namespace ListOfNames
 					}
 				}
 			}
+			UpdateConsoleText($"Data loaded from file: {_csvFile}");
 		}
 
 		private void UpdateConsoleText(string message)
 		{
 			if (txt_box_server_console.InvokeRequired)
-				txt_box_server_console.Invoke(new Action<string>(UpdateConsoleText), message);
+				txt_box_server_console.Invoke(new Action<string>(UpdateConsoleText), $"{message}{Environment.NewLine}");
 			else
-				txt_box_server_console.Text += message;
+				txt_box_server_console.Text += $"{message}{Environment.NewLine}";
 		}
 	}
 }
