@@ -38,7 +38,7 @@ namespace Client
 		private void btn_save_Click(object sender, EventArgs e)
 		{
 			_firstName = txt_box_firstname.Text;
-			_lastName = txt_box_lastname.Text; //TODO pokud nejsou textboxy prázdné, tak dialog.result OK, jinak ošetřit
+			_lastName = txt_box_lastname.Text;
 
 			this.DialogResult = DialogResult.OK;
 			this.Close();

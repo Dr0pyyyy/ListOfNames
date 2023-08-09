@@ -46,8 +46,19 @@ namespace Client
 			txt_box_ip.Enabled = false;
 			txt_box_port.Enabled = false;
 
-			_client.Connect(txt_box_ip.Text, Convert.ToInt32(txt_box_port.Text));
-			txt_box_client_console.Text += $"Client connected!{Environment.NewLine}";
+			try
+			{
+				_client.Connect(txt_box_ip.Text, Convert.ToInt32(txt_box_port.Text));
+				UpdateConsoleText("Client connected!");
+			}
+			catch(Exception ex) 
+			{
+				UpdateConsoleText($"WARNING: {ex.Message}");
+				btn_connect.Enabled = true;
+				txt_box_ip.Enabled= true;
+				txt_box_port.Enabled= true;
+				return;
+			}
 		}
 
 		private void btn_create_Click(object sender, EventArgs e)
@@ -58,8 +69,14 @@ namespace Client
 
 				if (result == DialogResult.OK)
 				{
+					if (personForm.FirstName == "" || personForm.LastName == "")
+					{
+						UpdateConsoleText("WARNING: New record must contain values!");
+						return;
+					}
+
 					_client.WriteLine($"CREATE,{personForm.FirstName},{personForm.LastName}");
-					txt_box_client_console.Text += $"Creating new record... {Environment.NewLine}";
+					UpdateConsoleText("Creating new record...");
 				}
 			}
 		}
@@ -70,7 +87,7 @@ namespace Client
 			if (dialogResult == DialogResult.Yes)
 			{
 				_client.WriteLine("DELETE");
-				txt_box_client_console.Text += $"Deleting selected record... {Environment.NewLine}";
+				UpdateConsoleText("Deleting selected record...");
 			}
 		}
 
@@ -87,6 +104,14 @@ namespace Client
 						_client.WriteLine($"EDIT,{personForm.FirstName},{personForm.LastName}");
 				}
 			}
+		}
+
+		private void UpdateConsoleText(string message)
+		{
+			if (txt_box_client_console.InvokeRequired)
+				txt_box_client_console.Invoke(new Action<string>(UpdateConsoleText), $"{message}{Environment.NewLine}");
+			else
+				txt_box_client_console.Text += $"{message}{Environment.NewLine}";
 		}
 	}
 }

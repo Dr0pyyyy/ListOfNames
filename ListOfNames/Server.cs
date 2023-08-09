@@ -51,7 +51,7 @@ namespace ListOfNames
 			}
 			catch (Exception ex)
 			{
-				UpdateConsoleText(ex.Message);
+				UpdateConsoleText($"WARNING: {ex.Message}");
 				return;
 			}
 
@@ -77,7 +77,7 @@ namespace ListOfNames
 			//Clean up
 			dataGridView1.DataSource = null;
 			_records.Clear();
-			txt_box_server_console.Text += $"Server closing...{Environment.NewLine}";
+			UpdateConsoleText("Server closing...");
 		}
 
 		private void HandleRecievedData(object sender, SimpleTCP.Message e)
@@ -91,7 +91,13 @@ namespace ListOfNames
 			if (dataParts.Length == 3 && dataParts.First() == "EDIT" && dataGridView1.SelectedRows.Count == 1)
 				EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", "")); //TODO also here
 
-			//TODO přidat refresh datagridview, nejspíš implementovat funkci LoadDataFromCsvIntoRecords
+			//Refresh data
+			dataGridView1.Invoke(new Action(() => {
+				dataGridView1.DataSource = null;
+				_records.Clear();
+				LoadDataFromCsvIntoRecords(_csvFile);
+				dataGridView1.DataSource = _records;
+			}));
 		}
 
 		private void AddRecordToCsv(string firstName, string lastName)
@@ -127,7 +133,7 @@ namespace ListOfNames
 				UpdateConsoleText("Record deleted!");
 			}
 			else
-				UpdateConsoleText("Record not found!");
+				UpdateConsoleText("WARNING: Record not found!");
 		}
 
 		private void EditRecordToCsv(int idToEdit, string firstName, string lastName)
@@ -150,6 +156,9 @@ namespace ListOfNames
 
 		private void LoadDataFromCsvIntoRecords(string filePath)
 		{
+			if (!Directory.Exists(filePath))
+				return;
+
 			using (StreamReader reader = new StreamReader(filePath))
 			{
 				string line;
