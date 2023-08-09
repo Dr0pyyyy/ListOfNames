@@ -46,7 +46,8 @@ namespace Client
 			txt_box_ip.Enabled = false;
 			txt_box_port.Enabled = false;
 
-			_client.Connect(txt_box_ip.Text, 8910);//Todo: Hodnota na tvrdo, změnit!! A ještě dát to do trycatche
+			_client.Connect(txt_box_ip.Text, Convert.ToInt32(txt_box_port.Text));
+			txt_box_client_console.Text += $"Client connected!{Environment.NewLine}";
 		}
 
 		private void btn_create_Click(object sender, EventArgs e)
@@ -56,15 +57,21 @@ namespace Client
 				DialogResult result = personForm.ShowDialog();
 
 				if (result == DialogResult.OK)
+				{
 					_client.WriteLine($"CREATE,{personForm.FirstName},{personForm.LastName}");
+					txt_box_client_console.Text += $"Creating new record... {Environment.NewLine}";
+				}
 			}
 		}
 
 		private void btn_delete_Click(object sender, EventArgs e)
 		{
-			DialogResult dialogResult = MessageBox.Show("Are you sure you wanna delete selected record?", "Delete record" ,MessageBoxButtons.YesNo);
+			DialogResult dialogResult = MessageBox.Show("Are you sure you wanna delete selected record?", "Delete record", MessageBoxButtons.YesNo);
 			if (dialogResult == DialogResult.Yes)
+			{
 				_client.WriteLine("DELETE");
+				txt_box_client_console.Text += $"Deleting selected record... {Environment.NewLine}";
+			}
 		}
 
 		private void btn_edit_Click(object sender, EventArgs e)

@@ -35,6 +35,7 @@
 			this.lbl_port = new System.Windows.Forms.Label();
 			this.btn_stop = new System.Windows.Forms.Button();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.txt_box_server_console = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -102,11 +103,21 @@
 			this.dataGridView1.Size = new System.Drawing.Size(341, 255);
 			this.dataGridView1.TabIndex = 6;
 			// 
+			// txt_box_server_console
+			// 
+			this.txt_box_server_console.Location = new System.Drawing.Point(37, 331);
+			this.txt_box_server_console.Multiline = true;
+			this.txt_box_server_console.Name = "txt_box_server_console";
+			this.txt_box_server_console.ReadOnly = true;
+			this.txt_box_server_console.Size = new System.Drawing.Size(341, 159);
+			this.txt_box_server_console.TabIndex = 7;
+			// 
 			// Server
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(524, 347);
+			this.ClientSize = new System.Drawing.Size(524, 517);
+			this.Controls.Add(this.txt_box_server_console);
 			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.btn_stop);
 			this.Controls.Add(this.txt_box_port);
@@ -133,6 +144,7 @@
 		private System.Windows.Forms.Label lbl_port;
 		private System.Windows.Forms.Button btn_stop;
 		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.TextBox txt_box_server_console;
 	}
 }
 

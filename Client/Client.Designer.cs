@@ -36,6 +36,7 @@
 			this.btn_create = new System.Windows.Forms.Button();
 			this.btn_edit = new System.Windows.Forms.Button();
 			this.btn_delete = new System.Windows.Forms.Button();
+			this.txt_box_client_console = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// txt_box_port
@@ -84,7 +85,7 @@
 			// 
 			// btn_create
 			// 
-			this.btn_create.Location = new System.Drawing.Point(33, 74);
+			this.btn_create.Location = new System.Drawing.Point(33, 224);
 			this.btn_create.Name = "btn_create";
 			this.btn_create.Size = new System.Drawing.Size(75, 23);
 			this.btn_create.TabIndex = 11;
@@ -94,7 +95,7 @@
 			// 
 			// btn_edit
 			// 
-			this.btn_edit.Location = new System.Drawing.Point(181, 74);
+			this.btn_edit.Location = new System.Drawing.Point(181, 224);
 			this.btn_edit.Name = "btn_edit";
 			this.btn_edit.Size = new System.Drawing.Size(75, 23);
 			this.btn_edit.TabIndex = 12;
@@ -104,7 +105,7 @@
 			// 
 			// btn_delete
 			// 
-			this.btn_delete.Location = new System.Drawing.Point(341, 74);
+			this.btn_delete.Location = new System.Drawing.Point(341, 224);
 			this.btn_delete.Name = "btn_delete";
 			this.btn_delete.Size = new System.Drawing.Size(75, 23);
 			this.btn_delete.TabIndex = 13;
@@ -112,11 +113,21 @@
 			this.btn_delete.UseVisualStyleBackColor = true;
 			this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
 			// 
+			// txt_box_client_console
+			// 
+			this.txt_box_client_console.Location = new System.Drawing.Point(33, 71);
+			this.txt_box_client_console.Multiline = true;
+			this.txt_box_client_console.Name = "txt_box_client_console";
+			this.txt_box_client_console.ReadOnly = true;
+			this.txt_box_client_console.Size = new System.Drawing.Size(383, 133);
+			this.txt_box_client_console.TabIndex = 14;
+			// 
 			// Client
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(458, 130);
+			this.ClientSize = new System.Drawing.Size(458, 274);
+			this.Controls.Add(this.txt_box_client_console);
 			this.Controls.Add(this.btn_delete);
 			this.Controls.Add(this.btn_edit);
 			this.Controls.Add(this.btn_create);
@@ -143,6 +154,7 @@
 		private System.Windows.Forms.Button btn_create;
 		private System.Windows.Forms.Button btn_edit;
 		private System.Windows.Forms.Button btn_delete;
+		private System.Windows.Forms.TextBox txt_box_client_console;
 	}
 }
 
