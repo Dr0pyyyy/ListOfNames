@@ -116,6 +116,7 @@
 			this.txt_box_server_console.Multiline = true;
 			this.txt_box_server_console.Name = "txt_box_server_console";
 			this.txt_box_server_console.ReadOnly = true;
+			this.txt_box_server_console.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.txt_box_server_console.Size = new System.Drawing.Size(341, 139);
 			this.txt_box_server_console.TabIndex = 7;
 			// 

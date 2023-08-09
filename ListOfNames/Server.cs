@@ -18,7 +18,7 @@ namespace ListOfNames
 	{
 		private SimpleTcpServer _server;
 		private List<Record> _records = new List<Record>();
-		private string _csvFile = @"..\..\..\userData.csv"; //TODO z absolutní cesty udělat proměnnou a změnit defaultní lokaci (dát víc hluboko, nejspíš do složky bin)
+		private string _csvFile = @"records.csv";
 		private int _id;
 
 		public Server()
@@ -30,14 +30,15 @@ namespace ListOfNames
 		{
 			_server = new SimpleTcpServer();
 			dataGridView1.AutoGenerateColumns = true;
+			btn_stop.Enabled = false;
 		}
 
 		private void btn_start_Click(object sender, EventArgs e)
 		{
 			if (!File.Exists(_csvFile))
 			{
-				UpdateConsoleText($"WARNING: Specified path {_csvFile} does not exist!");
-				return;
+				var csvFile = File.Create(_csvFile);
+				csvFile.Close();
 			}
 
 			//Console clean up
@@ -91,12 +92,17 @@ namespace ListOfNames
 			string[] dataParts = e.MessageString.Split(',');
 
 			if (dataParts.Length == 3 && dataParts.First() == "CREATE")
-				AddRecordToCsv(dataParts[1], dataParts[2].Replace("\u0013", ""));  //TODO find out why client sends \u0013 at the end of call
-			else if (dataParts.First().Replace("\u0013", "") == "DELETE" && dataGridView1.SelectedRows.Count == 1)  //TODO also here
+				AddRecordToCsv(dataParts[1], dataParts[2].Replace("\u0013", ""));
+			else if (dataParts.First().Replace("\u0013", "") == "DELETE" && dataGridView1.SelectedRows.Count == 1)
 				DeleteRecordFromCsv((int)dataGridView1.SelectedCells[0].Value);
 			if (dataParts.Length == 3 && dataParts.First() == "EDIT" && dataGridView1.SelectedRows.Count == 1)
-				EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", "")); //TODO also here
+				EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", ""));
 
+			RefreshData();
+		}
+
+		private void RefreshData()
+		{
 			//Refresh data
 			dataGridView1.Invoke(new Action(() => {
 				dataGridView1.DataSource = null;
@@ -162,8 +168,6 @@ namespace ListOfNames
 
 		private void LoadDataFromCsvIntoRecords(string filePath)
 		{
-			
-
 			using (StreamReader reader = new StreamReader(filePath))
 			{
 				string line;
@@ -181,7 +185,7 @@ namespace ListOfNames
 					}
 				}
 			}
-			UpdateConsoleText($"Data loaded from file: {_csvFile}");
+			UpdateConsoleText($"Data loaded from file: {Path.GetFullPath(_csvFile)}");
 		}
 
 		private void UpdateConsoleText(string message)
@@ -189,7 +193,7 @@ namespace ListOfNames
 			if (txt_box_server_console.InvokeRequired)
 				txt_box_server_console.Invoke(new Action<string>(UpdateConsoleText), $"{message}{Environment.NewLine}");
 			else
-				txt_box_server_console.Text += $"{message}{Environment.NewLine}";
+				txt_box_server_console.Text += $"{DateTime.Now}: {message}{Environment.NewLine}";
 		}
 	}
 }
