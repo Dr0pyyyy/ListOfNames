@@ -69,7 +69,7 @@ namespace Client
 
 				if (result == DialogResult.OK)
 				{
-					if (personForm.FirstName == "" || personForm.LastName == "")
+					if (personForm.FirstName == "" && personForm.LastName == "")
 					{
 						UpdateConsoleText("WARNING: New record must contain values!");
 						return;

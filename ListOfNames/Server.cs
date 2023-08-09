@@ -34,6 +34,12 @@ namespace ListOfNames
 
 		private void btn_start_Click(object sender, EventArgs e)
 		{
+			if (!File.Exists(_csvFile))
+			{
+				UpdateConsoleText($"WARNING: Specified path {_csvFile} does not exist!");
+				return;
+			}
+
 			//Console clean up
 			txt_box_server_console.Clear();
 
@@ -156,8 +162,7 @@ namespace ListOfNames
 
 		private void LoadDataFromCsvIntoRecords(string filePath)
 		{
-			if (!Directory.Exists(filePath))
-				return;
+			
 
 			using (StreamReader reader = new StreamReader(filePath))
 			{
