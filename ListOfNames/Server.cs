@@ -46,7 +46,6 @@ namespace ListOfNames
 
 			btn_start.Enabled = false;
 			btn_stop.Enabled = true;
-
 			txt_box_ip.Enabled = false;
 			txt_box_port.Enabled = false;
 
@@ -92,11 +91,20 @@ namespace ListOfNames
 			string[] dataParts = e.MessageString.Split(',');
 
 			if (dataParts.Length == 3 && dataParts.First() == "CREATE")
+			{
 				AddRecordToCsv(dataParts[1], dataParts[2].Replace("\u0013", ""));
+				e.ReplyLine("CREATED");
+			}
 			else if (dataParts.First().Replace("\u0013", "") == "DELETE" && dataGridView1.SelectedRows.Count == 1)
+			{
 				DeleteRecordFromCsv((int)dataGridView1.SelectedCells[0].Value);
-			if (dataParts.Length == 3 && dataParts.First() == "EDIT" && dataGridView1.SelectedRows.Count == 1)
+                e.ReplyLine("DELETED");
+            }
+			else if (dataParts.Length == 3 && dataParts.First() == "EDIT" && dataGridView1.SelectedRows.Count == 1)
+			{
 				EditRecordToCsv((int)dataGridView1.SelectedCells[0].Value, dataParts[1], dataParts[2].Replace("\u0013", ""));
+				e.ReplyLine("EDITED");
+			}
 
 			RefreshData();
 		}

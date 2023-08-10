@@ -40,7 +40,10 @@ namespace Client
 			_firstName = txt_box_firstname.Text;
 			_lastName = txt_box_lastname.Text;
 
-			this.DialogResult = DialogResult.OK;
+			if (_firstName != "" || _lastName != "")
+				this.DialogResult = DialogResult.OK;
+			else
+				MessageBox.Show("New record must contain values!");
 			this.Close();
 		}
 	}
